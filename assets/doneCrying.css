@@ -1,0 +1,29 @@
+body, html {
+  height: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+body {
+    background-image: url("happy-man.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    
+}
+
+#quote {
+    font-size: 1.5em;
+}
+
+.vCenter {
+    margin: 20%;
+}
+
+button {
+    width: 30%;
+}
+

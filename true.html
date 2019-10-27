@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+        <title>Cry Time</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/front.css">
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 700px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
+        }
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: 'Roboto','sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+          }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+    <div id="floating-panel">
+    <b>Crying Locations: </b>
+    <select id="location">
+      <option value=0>Skiles Garden</option>
+      <option value=1>Burger Bowl</option>
+      <option value=2>Mayer Memorial Garden</option>
+      <option value=3>Clough Rooftop (5th floor)</option>
+      <option value=4>Bobby Dodd Stadium</option>
+      <option value=5>Curran St. Parking Garage</option>
+    </select>
+      </div>
+    <div id="map"></div>
+    </div>
+    <script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 17,
+          center: {lat: 33.774695, lng: -84.397282}
+        });
+        directionsRenderer.setMap(map);
+      if (navigator.geolocation) {
+      var infoWindow = new google.maps.InfoWindow;   
+      var pos;
+      navigator.geolocation.getCurrentPosition(function(position) {
+        pos = new google.maps.LatLng (
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('You are here.');
+        infoWindow.open(map);
+      }, function() {
+            handleLocationError(true, infoWindow, map.getCenter(), directionsService, directionsRenderer);
+      });
+  } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+      pos = new google.maps.LatLng (0,0)
+    }
+                                                   
+  //var pos = new google.maps.LatLng(33.774695, -84.397282)
+      var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsRenderer, pos);
+        };
+      document.getElementById('location').addEventListener('change', onChangeHandler);
+  
+}
+      
+
+      function calculateAndDisplayRoute(directionsService, directionsRenderer, pos) {
+        var coordinates;
+        var area = document.getElementById('location').value
+        if (area == 0){
+                coordinates = new google.maps.LatLng(33.773517, -84.395971);
+        }
+        else if (area == 1) {
+                coordinates = new google.maps.LatLng(33.778307, -84.402960);
+        }
+        else if(area == 2) {
+                coordinates = new google.maps.LatLng(33.773507, -84.395688);
+        }
+        else if(area == 3) {
+                coordinates = new google.maps.LatLng(33.774915, -84.396447);
+        }
+        else if(area == 4) {
+                coordinates = new google.maps.LatLng(33.772353, -84.392749);
+        }
+        else if(area == 5) {
+                coordinates = new google.maps.LatLng(33.779186, -84.405565);
+        }
+        else {
+          coordinates = pos;
+          
+        }
+        directionsService.route(
+            {
+              origin: pos,
+              destination: coordinates,
+              travelMode: 'WALKING'
+            },
+            function(response, status) {
+              if (status === 'OK') {
+                directionsRenderer.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+      }
+        
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                                  'Error: The Geolocation service failed.' :
+                                  'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+        
+        
+        
+    </script>
+      
+    <a class="btn btn-primary btn-lg" href="doneCrying.html" role="button">Start Crying</a>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg96PuSTj7ZUxfX5XCwFi_AFM8wHPkMsY&callback=initMap">
+    </script>
+  </body>
+</html>
